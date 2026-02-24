@@ -1,0 +1,27 @@
+<div class="card">
+  <p id="question">A boy discovers he’s a wizard.</p>
+  <button onclick="guess('Harry Potter')">Harry Potter</button>
+  <button onclick="guess('Percy Jackson')">Percy Jackson</button>
+</div>
+
+<script>
+let score = 0;
+
+function guess(choice){
+  if(choice==="Harry Potter"){
+    score++;
+    alert("Correct!");
+    fetch("/api/score",{
+      method:"POST",
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({score})
+    });
+  }else{
+    alert("Nope!");
+  }
+}
+
+fetch("/api/score")
+.then(r=>r.json())
+.then(d=>console.log("Saved score:",d.score));
+</script>

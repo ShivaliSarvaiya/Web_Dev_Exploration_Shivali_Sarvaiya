@@ -1,0 +1,29 @@
+<main id="books"></main>
+
+<script>
+fetch("/api/books")
+  .then(r=>r.json())
+  .then(data=>{
+    const container = document.getElementById("books");
+    data.forEach(b=>{
+      container.innerHTML += `
+        <div class="card">
+          <h3>${b.title}</h3>
+          <p>${b.genre}</p>
+          <a href="books.html?id=${b.id}">View Book</a>
+        </div>`;
+    });
+  });
+
+//// URL PARAM example
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+if(id){
+  fetch("/api/books/"+id)
+  .then(r=>r.json())
+  .then(book=>{
+    document.body.innerHTML += `<div class="card"><h2>${book.title}</h2></div>`;
+  });
+}
+</script>
