@@ -1,0 +1,25 @@
+{
+  "name": "web_dev_exploration_shivali_sarvaiya",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShivaliSarvaiya/Web_Dev_Exploration_Shivali_Sarvaiya.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ShivaliSarvaiya/Web_Dev_Exploration_Shivali_Sarvaiya/issues"
+  },
+  "homepage": "https://github.com/ShivaliSarvaiya/Web_Dev_Exploration_Shivali_Sarvaiya#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1"
+  }
+}
