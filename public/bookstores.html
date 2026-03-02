@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Washington Bookstores Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+  <style>
+    /* Make sure map has height */
+    #map {
+      height: 700px;
+      width: 100%;
+    }
+  </style>
+  <header>
+  <div class="logo-wrap">
+    <img src="logo.png" alt="Site logo" class="logo">
+  </div>
+
+  <h1>Book List</h1>
+
+  <nav>
+    <a href="index.html">Intro</a>
+    <a href="authors.html">Best Authors</a>
+    <a href="genres.html">Genres</a>
+    <a href="books.html">Book List</a>
+    <a href="game.html">Guess Game</a>
+    <a href="bookstores.html">Bookstores</a>
+  </nav>
+</header>
+</head>
+<body>
+
+  <h1>Bookstores in Seattle, WA</h1>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    // Create map centered on Seattle
+    var map = L.map('map').setView([47.6062, -122.3321], 12);
+
+    // Load OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Bookstores
+    var bookstores = [
+      ["Elliott Bay Book Company", 47.61466, -122.31983],
+      ["Twice Sold Tales", 47.61860, -122.32235],
+      ["Third Place Books (Ravenna)", 47.67599, -122.30638],
+      ["Kinokuniya Seattle", 47.59730, -122.32684],
+      ["Secret Garden Bookshop", 47.66887, -122.38556],
+      ["Magus Books", 47.65844, -122.31288],
+      ["Phinney Books", 47.68276, -122.35554],
+      ["Ophelia's Books", 47.65075, -122.34963]
+    ];
+
+    // Add markers
+    for (var i = 0; i < bookstores.length; i++) {
+      L.marker([bookstores[i][1], bookstores[i][2]])
+        .addTo(map)
+        .bindPopup("<b>" + bookstores[i][0] + "</b>");
+    }
+  </script>
+
+</body>
+</html>

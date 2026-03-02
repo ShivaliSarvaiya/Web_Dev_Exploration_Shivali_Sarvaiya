@@ -13,6 +13,40 @@ let books = [
 
 let nextId = 3;
 
+let currentUser = {
+  name: null,
+  theme: "light",
+  score: 0
+};
+
+app.post("/api/user", (req, res) => {
+  const name = req.body.name;
+  if(!name) return res.status(400).json({error:"No name"});
+
+  // Save to cookie (lasts 30 days)
+  res.cookie("username", name, { maxAge: 1000*60*60*24*30 });
+
+  res.json({ success:true });
+});
+app.get("/api/user", (req, res) => {
+  res.json(currentUser);
+});
+
+app.get("/api/user", (req, res) => {
+  const name = req.cookies.username || null;
+  res.json({ name });
+});
+
+
+app.post("/api/theme",(req,res)=>{
+  const theme=req.body.theme || "light";
+  res.cookie("theme",theme,{maxAge:1000*60*60*24*30});
+  res.json({success:true});
+});
+
+app.get("/api/theme",(req,res)=>{
+  res.json({theme:req.cookies.theme || "light"});
+});
 //// GET ALL
 app.get("/api/books", (req, res) => {
   res.status(200).json(books);
@@ -57,14 +91,14 @@ app.delete("/api/books/:id", (req, res) => {
 });
 
 //// COOKIE ROUTE (game score)
-app.get("/api/score", (req, res) => {
-  const score = req.cookies.score || 0;
-  res.json({ score });
+app.get("/api/score",(req,res)=>{
+  res.json({score:req.cookies.score || 0});
 });
 
-app.post("/api/score", (req, res) => {
-  res.cookie("score", req.body.score, { maxAge: 900000 });
-  res.json({ message: "Score saved!" });
+app.post("/api/score",(req,res)=>{
+  const score=req.body.score || 0;
+  res.cookie("score",score,{maxAge:1000*60*60*24*30});
+  res.json({success:true});
 });
 
 app.listen(3000, () => console.log("Server running on port 3000"));

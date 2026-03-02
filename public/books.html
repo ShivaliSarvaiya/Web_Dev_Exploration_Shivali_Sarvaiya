@@ -9,32 +9,48 @@
 <body>
 
 <header>
-<h1>Book List</h1>
-<nav>
-<a href="index.html">Intro</a>
-<a href="authors.html">Best Authors</a>
-<a href="genres.html">Genres</a>
-<a href="books.html">Book List</a>
-<a href="game.html">Guess Game</a>
-</nav>
+  <div class="logo-wrap">
+    <img src="logo.png" alt="Site logo" class="logo">
+  </div>
+
+  <h1>Book List</h1>
+
+  <nav>
+    <a href="index.html">Intro</a>
+    <a href="authors.html">Best Authors</a>
+    <a href="genres.html">Genres</a>
+    <a href="books.html">Book List</a>
+    <a href="game.html">Guess Game</a>
+    <a href="bookstores.html">Bookstores</a>
+  </nav>
 </header>
 
 <main>
 
-<div class="card">
-<h2>Add a Book</h2>
-<input id="titleInput" placeholder="Title">
-<input id="genreInput" placeholder="Genre">
-<button onclick="addBook()">Add</button>
-</div>
+  <div class="card">
+    <h2>Add a Book</h2>
 
-<div id="books"></div>
-<div id="bookDetail"></div>
+    <input id="titleInput" placeholder="Title">
+    <input id="genreInput" placeholder="Genre">
+    <input id="imageInput" placeholder="Image URL">
+
+    <select id="listInput">
+      <option value="to-read">To Read</option>
+      <option value="read">Have Read</option>
+      <option value="favorites">Favorites</option>
+    </select>
+
+    <button onclick="addBook()">Add</button>
+  </div>
+
+  <div id="books"></div>
+  <div id="bookDetail"></div>
 
 </main>
 
-<script src="script.js"></script>
 <footer>Reading Portfolio Final Project</footer>
+
+<script src="script.js"></script>
 
 </body>
 </html>

@@ -8,35 +8,40 @@ body{
 header{
   background:#1f2a44;
   color:white;
-  padding:1.4rem;
+  padding:2rem 1.4rem;
   text-align:center;
-  box-shadow:0 6px 18px rgba(0,0,0,0.15);
+  box-shadow:0 8px 20px rgba(0,0,0,0.18);
+
 }
 
 nav{
-  margin-top:8px;
+  margin-top:20px;
+  display:flex;
+  justify-content:center;
+  gap:22px;
+  flex-wrap:wrap; /* keeps it nice on smaller screens */
 }
 
 nav a{
+  padding:14px 28px;
+  background:#3b4f7a;
   color:white;
-  margin:0 16px;
   text-decoration:none;
-  font-weight:500;
-  position:relative;
+  border-radius:18px;
+  font-size:17px;
+  transition:all 0.3s ease;
+  border:2px solid transparent;
 }
 
-nav a::after{
-  content:'';
-  position:absolute;
-  bottom:-4px;
-  left:0;
-  width:0;
-  height:2px;
-  background:white;
-  transition:.3s;
+nav a:hover{
+  background:#2d6cdf;
+  transform:translateY(-2px);
 }
 
-nav a:hover::after{ width:100%; }
+nav a.active{
+  background:#5f7dbf;
+  border:2px solid white;
+}
 
 main{
   max-width:900px;
@@ -57,7 +62,10 @@ main{
   transform:translateY(-6px);
 }
 
-h1,h2,h3{ margin-top:0; }
+h1,h2,h3{
+margin-top:0;
+}
+
 
 button{
   background:#2d6cdf;
@@ -86,4 +94,68 @@ footer{
   text-align:center;
   padding:20px;
   color:#666;
+}
+
+.logo{
+  width:55px;
+  height:55px;
+  border-radius:12px;
+  margin-bottom:8px;
+}
+
+.logo-wrap{
+  display:flex;
+  justify-content:center;
+}
+
+.hero{
+  text-align:center;
+  padding:60px 20px 30px;
+}
+
+.fade{
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeUp .9s forwards;
+}
+
+.delay{ animation-delay:.3s; }
+
+@keyframes fadeUp{
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.book-card img{
+  width:100%;
+  height:240px;
+  object-fit:cover;
+  border-radius:10px;
+  margin-bottom:12px;
+}
+
+.tag{
+  background:#eef3ff;
+  padding:4px 10px;
+  border-radius:6px;
+  font-size:.8rem;
+  display:inline-block;
+}
+
+.genre{
+  padding:35px;
+  border-radius:18px;
+  margin-bottom:25px;
+  color:white;
+}
+
+.fantasy{
+  background:linear-gradient(135deg,#6a8cff,#4a60d3);
+}
+
+.mystery{
+  background:linear-gradient(135deg,#444,#111);
+}
+
+.history{
+  background:linear-gradient(135deg,#d98c4a,#a8622c);
 }

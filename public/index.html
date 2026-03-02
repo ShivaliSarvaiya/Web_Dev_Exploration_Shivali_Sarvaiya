@@ -10,16 +10,33 @@
 
 <header>
   <h1>My Reading World</h1>
+  <div class="logo-wrap">
+  <img src="logo.png" alt="Site logo" class="logo">
+</div>
   <nav>
     <a href="index.html">Intro</a>
     <a href="authors.html">Best Authors</a>
     <a href="genres.html">Genres</a>
     <a href="books.html">Book List</a>
-    <a href="game.html">Guess Game</a>
+    <a href="game.html">Guess Game!</a>
+    <a href="bookstores.html">Bookstores</a>
+    <a href="aesthetics_gallery.html">Gallery</a>
+    <a href="playlists.html">Playlist Maker!</a>
   </nav>
 </header>
 
 <main>
+  <section class="hero">
+  <h2 class="fade">A world built from pages</h2>
+  <p class="fade delay">Stories shape how I see people, places, and possibilities.</p>
+</section>
+
+<div class="card">
+  <h2>Create Profile</h2>
+  <input id="usernameInput" placeholder="Enter username">
+  <button onclick="saveUser()">Save Profile</button>
+  <p id="currentUser"></p>
+</div>
 
 <section class="card">
   <h2>Welcome</h2>

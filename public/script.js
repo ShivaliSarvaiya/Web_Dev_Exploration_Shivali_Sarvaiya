@@ -12,35 +12,39 @@ async function loadBooks() {
 
   container.innerHTML = "";
 
+   }
+
   data.forEach(book => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
+  const div = document.createElement("div");
+  div.className = "card";
+
+  div.innerHTML = `
+    <div class="book-card">
+      <img src="${book.image}" alt="Cover of ${book.title}">
       <h3>${book.title}</h3>
       <p>${book.genre}</p>
+      <p class="tag">${book.list}</p>
+
       <button onclick="deleteBook(${book.id})">Delete</button>
       <button onclick="updateBook(${book.id})">Rename</button>
       <a href="books.html?id=${book.id}">View</a>
-    `;
-    container.appendChild(div);
-  });
-}
+    </div>
+  `;
+
+  container.appendChild(div);
+});
 
 
-// CREATE new book
-async function addBook() {
-  const title = document.getElementById("titleInput").value;
-  const genre = document.getElementById("genreInput").value;
+async function addBook(){
+  const title=document.getElementById("titleInput").value;
+  const genre=document.getElementById("genreInput").value;
+  const image=document.getElementById("imageInput").value;
+  const list=document.getElementById("listInput").value;
 
-  if (!title || !genre) {
-    alert("Fill in both fields!");
-    return;
-  }
-
-  await fetch("/api/books", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, genre })
+  await fetch("/api/books",{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({title,genre,image,list})
   });
 
   loadBooks();
@@ -169,4 +173,56 @@ window.addEventListener("DOMContentLoaded", () => {
   loadSingleBookFromURL();
   loadQuestion();
   loadScore();
+  loadUser();  
 });
+
+function saveUser(){
+  const name=document.getElementById("usernameInput").value;
+  if(!name) return alert("Enter a name");
+
+  fetch("/api/user",{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name})
+  });
+}
+  
+async function loadUser(){
+  const res = await fetch("/api/user");
+  const user = await res.json();
+
+  if(user.name){
+    const banner = document.getElementById("currentUser");
+    if(banner){
+      banner.textContent = "Profile: " + user.name;
+    }
+  }
+
+
+  document.getElementById("currentUser").textContent="Profile: "+name;
+}
+
+async function setTheme(theme){
+  document.body.classList.toggle("dark", theme==="dark");
+
+  await fetch("/api/theme",{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({theme})
+  });
+}
+
+async function loadUser(){
+  const res = await fetch("/api/user");
+  const user = await res.json();
+
+  if(user.name){
+    const banner=document.getElementById("currentUser");
+    if(banner) banner.textContent="Profile: "+user.name;
+  }
+
+  // Load theme
+  const themeRes=await fetch("/api/theme");
+  const themeData=await themeRes.json();
+  document.body.classList.toggle("dark",themeData.theme==="dark");
+}
