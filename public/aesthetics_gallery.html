@@ -10,6 +10,34 @@
 <body>
 
 <header>
+
+     <!-- SAME dropdown UI as index.html -->
+    <div class="profile-menu">
+      <button id="profileButton" onclick="toggleProfileMenu()">
+        <span id="currentUser">Profile</span> ▼
+      </button>
+
+      <div id="profileDropdown" class="profile-dropdown">
+        <input
+          id="usernameInput"
+          placeholder="Enter name"
+          autocomplete="new-password"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          name="profile_name_input_books"
+        />
+        <button onclick="saveUser()">Save Profile</button>
+
+        <hr />
+        <p>Theme</p>
+        <button onclick="setTheme('light')">Light</button>
+        <button onclick="setTheme('dark')">Dark</button>
+
+        <hr />
+        <button onclick="logout()">Sign Out</button>
+      </div>
+    </div>
 <h1>everything books!</h1>
 
 
@@ -18,9 +46,9 @@
 <a href="index.html">Intro</a>
     <a href="authors.html">Best Authors</a>
     <a href="books.html">Book List</a>
-    <a href="game.html" class="active">Guess Game!</a>
+    <a href="game.html">Guess Game!</a>
     <a href="bookstores.html">Bookstores</a>
-    <a href="aesthetics_gallery.html">Gallery</a>
+    <a href="aesthetics_gallery.html" class="active">Gallery</a>
     <a href="playlists.html">Playlist Maker!</a>
 </nav>
 </header>

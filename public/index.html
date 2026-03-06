@@ -11,39 +11,35 @@
 
 <header>
 
-  <div class="profile-menu">
+  <!-- SAME dropdown UI as index.html -->
+    <div class="profile-menu">
+      <button id="profileButton" onclick="toggleProfileMenu()">
+        <span id="currentUser">Profile</span> ▼
+      </button>
 
-    <button id="profileButton" onclick="toggleProfileMenu()">
-      <span id="currentUser">Profile</span> ▼
-    </button>
+      <div id="profileDropdown" class="profile-dropdown">
+        <input
+          id="usernameInput"
+          placeholder="Enter name"
+          autocomplete="new-password"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          name="profile_name_input_books"
+        />
+        <button onclick="saveUser()">Save Profile</button>
 
-    <div id="profileDropdown" class="profile-dropdown">
-      <!-- FIX: turn off browser autofill/suggestions -->
-      <input
-        id="usernameInput"
-        placeholder="Enter name"
-        autocomplete="off"
-        autocapitalize="none"
-        autocorrect="off"
-        spellcheck="false"
-        name="profile_name_input"  <!-- intentionally non-standard to avoid autofill -->
-        aria-autocomplete="none"
-        inputmode="text"
-      >
-      <button onclick="saveUser()">Save Profile</button>
+        <hr />
+        <p>Theme</p>
+        <button onclick="setTheme('light')">Light</button>
+        <button onclick="setTheme('dark')">Dark</button>
 
-      <hr>
-
-      <p>Theme</p>
-      <button onclick="setTheme('light')">Light</button>
-      <button onclick="setTheme('dark')">Dark</button>
-
-      <hr>
-
-      <button onclick="logout()">Sign Out</button>
+        <hr />
+        <button onclick="logout()">Sign Out</button>
+      </div>
     </div>
 
-  </div>
+    
 
   <h1>everything books!</h1>
 
