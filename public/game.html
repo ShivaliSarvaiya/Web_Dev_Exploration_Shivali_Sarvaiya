@@ -53,13 +53,13 @@
   <main>
     <section class="card">
       <!-- The question/prompt -->
-      <h2 id="bg-question">[ Set your plot prompt here ]</h2>
+      <h2 id="bg-question">In what book does the Main character investigate a murder?</h2>
 
       <!-- Three options -->
       <div style="display:flex; gap:10px; flex-wrap:wrap; margin:12px 0;">
-        <button id="bg-opt1" type="button" onclick="bookGame_submitGuess(0)">Option 1</button>
-        <button id="bg-opt2" type="button" onclick="bookGame_submitGuess(1)">Option 2</button>
-        <button id="bg-opt3" type="button" onclick="bookGame_submitGuess(2)">Option 3</button>
+        <button id="bg-opt1" type="button" onclick="bookGame_submitGuess(0)">Harry Potter</button>
+        <button id="bg-opt2" type="button" onclick="bookGame_submitGuess(1)">Divine Rivals</button>
+        <button id="bg-opt3" type="button" onclick="bookGame_submitGuess(2)">A Good Girl's Guide to Murder</button>
       </div>
 
       <!-- Feedback + Score -->
@@ -70,21 +70,6 @@
       </div>
 
       <hr style="margin:18px 0; opacity:.4;" />
-
-
-          <label>Correct Option:
-            <select id="bg-edit-correct">
-              <option value="0">Option 1</option>
-              <option value="1">Option 2</option>
-              <option value="2">Option 3</option>
-            </select>
-          </label>
-
-          <div>
-            <button type="button" onclick="bookGame_applyEditor()">Apply Above to Game</button>
-          </div>
-        </div>
-      </details>
     </section>
   </main>
 
