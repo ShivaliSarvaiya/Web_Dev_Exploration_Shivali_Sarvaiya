@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <title>Guess the Plot</title>
-  <!-- Load your shared CSS + font -->
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://use.typekit.net/xzh5etg.css" />
 </head>
 
 <body>
   <header>
-    <!-- SAME Profile ▼ dropdown as other pages -->
+    <!-- SAME Profile ▼ dropdown used on other pages -->
     <div class="profile-menu">
       <button id="profileButton" onclick="toggleProfileMenu()">
         <span id="currentUser">Profile</span> ▼
@@ -40,55 +39,57 @@
 
     <h1>everything books!</h1>
 
-    <nav>
-      <a href="index.html">Intro</a>
-      <a href="authors.html">Best Authors</a>
-      <a href="books.html">Book List</a>
-      <a href="game.html" class="active">Guess Game!</a>
-      <a href="bookstores.html">Bookstores</a>
-      <a href="aesthetics_gallery.html">Gallery</a>
-      <a href="playlists.html">Playlist Maker!</a>
-    </nav>
+  <nav>
+<a href="index.html">Intro</a>
+    <a href="authors.html">Best Authors</a>
+    <a href="books.html">Book List</a>
+    <a href="game.html" class="active">Guess Game!</a>
+    <a href="bookstores.html">Bookstores</a>
+    <a href="aesthetics_gallery.html">Gallery</a>
+    <a href="playlists.html">Playlist Maker!</a>
+  </nav>
   </header>
 
   <main>
     <section class="card">
-      <h2 id="game-question">[ Your plot prompt goes here ]</h2>
+      <!-- The question/prompt -->
+      <h2 id="bg-question">[ Set your plot prompt here ]</h2>
 
+      <!-- Three options -->
       <div style="display:flex; gap:10px; flex-wrap:wrap; margin:12px 0;">
-        <button id="opt1" type="button" onclick="submitGuess(0)">Option 1</button>
-        <button id="opt2" type="button" onclick="submitGuess(1)">Option 2</button>
-        <button id="opt3" type="button" onclick="submitGuess(2)">Option 3</button>
+        <button id="bg-opt1" type="button" onclick="bookGame_submitGuess(0)">Option 1</button>
+        <button id="bg-opt2" type="button" onclick="bookGame_submitGuess(1)">Option 2</button>
+        <button id="bg-opt3" type="button" onclick="bookGame_submitGuess(2)">Option 3</button>
       </div>
 
-      <p id="game-feedback" style="min-height:1.4em;"></p>
-
+      <!-- Feedback + Score -->
+      <p id="bg-feedback" style="min-height:1.4em;"></p>
       <div style="display:flex; gap:14px; align-items:center; margin-top:10px;">
-        <button type="button" onclick="resetGameScore()">Reset Score</button>
-        <strong id="game-score">Score: 0</strong>
+        <button type="button" onclick="bookGame_resetScore()">Reset Score</button>
+        <strong id="bg-score">Score: 0</strong>
       </div>
 
       <hr style="margin:18px 0; opacity:.4;" />
 
-      <!-- You can edit these fields on the page to set up your question/options quickly -->
+      <!-- Quick Editor (optional, to fill the prompt and options right on the page) -->
       <details>
         <summary>Quick Editor (for you)</summary>
         <div style="margin-top:10px; display:grid; gap:8px;">
           <label>Question/Plot
-            <input id="edit-question" placeholder="Type your question/plot…" />
+            <input id="bg-edit-question" placeholder="Type your question/plot…" />
           </label>
           <label>Option 1
-            <input id="edit-opt1" placeholder="First option" />
+            <input id="bg-edit-opt1" placeholder="First option" />
           </label>
           <label>Option 2
-            <input id="edit-opt2" placeholder="Second option" />
+            <input id="bg-edit-opt2" placeholder="Second option" />
           </label>
           <label>Option 3
-            <input id="edit-opt3" placeholder="Third option" />
+            <input id="bg-edit-opt3" placeholder="Third option" />
           </label>
 
           <label>Correct Option:
-            <select id="edit-correct">
+            <select id="bg-edit-correct">
               <option value="0">Option 1</option>
               <option value="1">Option 2</option>
               <option value="2">Option 3</option>
@@ -96,14 +97,13 @@
           </label>
 
           <div>
-            <button type="button" onclick="applyGameEditor()">Apply Above to Game</button>
+            <button type="button" onclick="bookGame_applyEditor()">Apply Above to Game</button>
           </div>
         </div>
       </details>
     </section>
   </main>
 
-  <!-- Shared logic (profile + theme + playlists + books + game) -->
   <script src="script.js"></script>
 
   <footer>Reading Portfolio Final Project</footer>

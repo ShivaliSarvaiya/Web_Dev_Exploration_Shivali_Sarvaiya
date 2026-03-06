@@ -345,3 +345,129 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 ``
+/* =========================
+   GUESS GAME (single prompt, 3 options)
+   - Score is saved per user in localStorage under playerProfile::<username>.gameProgress.score
+========================= */
+
+// Minimal helpers to read/write per-user profile safely (won't overwrite your other fields)
+function bookGame_getActiveUser() {
+  return localStorage.getItem("username") || null;
+}
+function bookGame_profileKey(u) {
+  return u ? `playerProfile::${u}` : null;
+}
+function bookGame_readProfile(u) {
+  const key = bookGame_profileKey(u);
+  if (!key) return null;
+  let obj = {};
+  const raw = localStorage.getItem(key);
+  if (raw) {
+    try { obj = JSON.parse(raw) || {}; } catch { obj = {}; }
+  }
+  if (typeof obj !== "object" || obj === null) obj = {};
+  if (!obj.username) obj.username = u;
+  if (!obj.gameProgress || typeof obj.gameProgress !== "object") obj.gameProgress = {};
+  if (typeof obj.gameProgress.score !== "number") obj.gameProgress.score = 0;
+  return obj;
+}
+function bookGame_writeProfile(u, obj) {
+  const key = bookGame_profileKey(u);
+  if (!key) return;
+  localStorage.setItem(key, JSON.stringify(obj));
+}
+
+// In-memory game state: you can also hard-code your default prompt/options here if you prefer
+const bookGame_State = {
+  question: "[ Set your plot prompt here ]",
+  options: ["Option 1", "Option 2", "Option 3"],
+  correctIndex: 0, // 0, 1, or 2
+};
+
+// Render the question + options into the page
+function bookGame_renderQuestion() {
+  const qEl = document.getElementById("bg-question");
+  const o1 = document.getElementById("bg-opt1");
+  const o2 = document.getElementById("bg-opt2");
+  const o3 = document.getElementById("bg-opt3");
+  if (!qEl || !o1 || !o2 || !o3) return; // not on game page
+
+  qEl.textContent = bookGame_State.question;
+  o1.textContent = bookGame_State.options[0];
+  o2.textContent = bookGame_State.options[1];
+  o3.textContent = bookGame_State.options[2];
+
+  const fb = document.getElementById("bg-feedback");
+  if (fb) fb.textContent = "";
+}
+
+// Render the score from the player's profile
+function bookGame_renderScore() {
+  const el = document.getElementById("bg-score");
+  if (!el) return;
+  const user = bookGame_getActiveUser();
+  if (!user) { el.textContent = "Score: 0"; return; }
+  const p = bookGame_readProfile(user);
+  el.textContent = `Score: ${p.gameProgress.score || 0}`;
+}
+
+// Handle a guess click (index = 0,1,2)
+function bookGame_submitGuess(index) {
+  const fb = document.getElementById("bg-feedback");
+  if (index === bookGame_State.correctIndex) {
+    if (fb) fb.textContent = "✅ Correct! +1 point";
+    const user = bookGame_getActiveUser();
+    if (user) {
+      const p = bookGame_readProfile(user);
+      p.gameProgress.score = (p.gameProgress.score || 0) + 1;
+      bookGame_writeProfile(user, p);
+      bookGame_renderScore();
+    }
+  } else {
+    if (fb) fb.textContent = "❌ Incorrect, try again!";
+  }
+}
+
+// Reset score for the active user
+function bookGame_resetScore() {
+  const user = bookGame_getActiveUser();
+  if (!user) { alert("Save your profile name first (Profile ▼)."); return; }
+  const p = bookGame_readProfile(user);
+  p.gameProgress.score = 0;
+  bookGame_writeProfile(user, p);
+  bookGame_renderScore();
+  const fb = document.getElementById("bg-feedback");
+  if (fb) fb.textContent = "Score reset to 0.";
+}
+
+// Copy values from the Quick Editor into the live game
+function bookGame_applyEditor() {
+  const q = document.getElementById("bg-edit-question")?.value.trim();
+  const a = document.getElementById("bg-edit-opt1")?.value.trim();
+  const b = document.getElementById("bg-edit-opt2")?.value.trim();
+  const c = document.getElementById("bg-edit-opt3")?.value.trim();
+  const ci = parseInt(document.getElementById("bg-edit-correct")?.value, 10);
+
+  if (q) bookGame_State.question = q;
+  if (a) bookGame_State.options[0] = a;
+  if (b) bookGame_State.options[1] = b;
+  if (c) bookGame_State.options[2] = c;
+  if ([0,1,2].includes(ci)) bookGame_State.correctIndex = ci;
+
+  bookGame_renderQuestion();
+}
+
+// Initialize only on the game page
+function bookGame_init() {
+  if (!document.getElementById("bg-question")) return; // not on game.html
+  bookGame_renderQuestion();
+  bookGame_renderScore();
+}
+
+// Expose minimal API for your HTML buttons
+window.bookGame_submitGuess = bookGame_submitGuess;
+window.bookGame_resetScore = bookGame_resetScore;
+window.bookGame_applyEditor = bookGame_applyEditor;
+
+// Run after the rest of your app initializes
+document.addEventListener("DOMContentLoaded", bookGame_init);
