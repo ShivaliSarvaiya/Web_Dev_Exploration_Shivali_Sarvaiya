@@ -471,3 +471,272 @@ window.bookGame_applyEditor = bookGame_applyEditor;
 
 // Run after the rest of your app initializes
 document.addEventListener("DOMContentLoaded", bookGame_init);
+
+/* =========================
+   GUESS GAME (10 questions, 3 options)
+   - Score & progress saved per user in playerProfile::<username>.gameProgress
+========================= */
+(function () {
+  // --- small helpers (compatible with your existing storage) ---
+  function getUser() {
+    return localStorage.getItem("username") || null;
+  }
+  function keyFor(u) {
+    return u ? `playerProfile::${u}` : null;
+  }
+  function readProfile(u) {
+    const k = keyFor(u);
+    if (!k) return null;
+    let obj = {};
+    const raw = localStorage.getItem(k);
+    if (raw) {
+      try { obj = JSON.parse(raw) || {}; } catch { obj = {}; }
+    }
+    if (typeof obj !== "object" || obj === null) obj = {};
+    if (!obj.username) obj.username = u;
+    if (!obj.gameProgress || typeof obj.gameProgress !== "object") {
+      obj.gameProgress = { score: 0, index: 0 };
+    } else {
+      if (typeof obj.gameProgress.score !== "number") obj.gameProgress.score = 0;
+      if (typeof obj.gameProgress.index !== "number") obj.gameProgress.index = 0;
+    }
+    return obj;
+  }
+  function writeProfile(u, obj) {
+    const k = keyFor(u);
+    if (!k) return;
+    localStorage.setItem(k, JSON.stringify(obj));
+  }
+
+  // --- 10 questions (popular book prompts; concise, non-copyright) ---
+  const QUESTIONS = [
+    {
+      q: "A child discovers a hidden world of magic after receiving a special invitation.",
+      opts: ["Harry Potter", "Percy Jackson", "The Hunger Games"],
+      correct: 0,
+    },
+    {
+      q: "A demigod learns the truth about parentage and undertakes a quest with friends.",
+      opts: ["Divergent", "Percy Jackson", "Twilight"],
+      correct: 1,
+    },
+    {
+      q: "A teen volunteers to protect a sibling and must survive a deadly televised contest.",
+      opts: ["The Maze Runner", "The Hunger Games", "Ender’s Game"],
+      correct: 1,
+    },
+    {
+      q: "A young hobbit leaves home with a ring that must be destroyed to save the world.",
+      opts: ["Eragon", "The Lord of the Rings", "The Wheel of Time"],
+      correct: 1,
+    },
+    {
+      q: "A curious girl falls into a strange land where logic twists and time behaves oddly.",
+      opts: ["Peter Pan", "Alice’s Adventures in Wonderland", "Coraline"],
+      correct: 1,
+    },
+    {
+      q: "Four siblings enter a wintery realm through a wardrobe to help a rightful ruler.",
+      opts: ["The Chronicles of Narnia", "A Wrinkle in Time", "His Dark Materials"],
+      correct: 0,
+    },
+    {
+      q: "A gifted child trains at a battle school to prepare for an alien conflict.",
+      opts: ["Ender’s Game", "Dune", "The Martian"],
+      correct: 0,
+    },
+    {
+      q: "A royal heir must navigate desert politics and prophecy amid warring houses.",
+      opts: ["Red Queen", "Dune", "The Priory of the Orange Tree"],
+      correct: 1,
+    },
+    {
+      q: "A boy finds a dragon egg and becomes entangled in an ancient struggle.",
+      opts: ["Eragon", "The Hobbit", "The Witcher"],
+      correct: 0,
+    },
+    {
+      q: "A group of teens awaken in a giant maze with no memories and must escape.",
+      opts: ["The Maze Runner", "City of Bones", "Ready Player One"],
+      correct: 0,
+    },
+  ];
+
+  // --- in-memory state for this page only ---
+  const state = {
+    idx: 0,        // question index
+    answered: false, // prevent multiple scoring
+  };
+
+  // convenience to get elements (your script defines $, but keep self-contained)
+  function el(id) { return document.getElementById(id); }
+
+  function renderScore() {
+    const scoreEl = el("bg-score");
+    if (!scoreEl) return;
+    const u = getUser();
+    let score = 0;
+    if (u) {
+      const p = readProfile(u);
+      score = p.gameProgress.score || 0;
+    }
+    scoreEl.textContent = `Score: ${score}`;
+  }
+
+  function renderQuestion() {
+    const qObj = QUESTIONS[state.idx];
+    const qEl = el("bg-question");
+    const o1 = el("bg-opt1");
+    const o2 = el("bg-opt2");
+    const o3 = el("bg-opt3");
+    const fb = el("bg-feedback");
+    const prog = el("bg-progress");
+    const next = el("bg-next");
+
+    if (!qObj || !qEl || !o1 || !o2 || !o3) return;
+
+    qEl.textContent = qObj.q;
+    o1.textContent = qObj.opts[0];
+    o2.textContent = qObj.opts[1];
+    o3.textContent = qObj.opts[2];
+
+    // enable buttons for new question
+    [o1, o2, o3].forEach((b) => (b.disabled = false));
+    state.answered = false;
+
+    if (fb) fb.textContent = "";
+    if (prog) prog.textContent = `Question ${state.idx + 1} / ${QUESTIONS.length}`;
+    if (next) {
+      next.disabled = true;
+      next.textContent = "Next";
+      next.onclick = () => window.bookGame_next(); // keep HTML handler consistent
+    }
+
+    renderScore();
+  }
+
+  function submitGuess(choiceIndex) {
+    if (state.answered) return;
+    const qObj = QUESTIONS[state.idx];
+    if (!qObj) return;
+
+    state.answered = true;
+
+    // disable options after one attempt
+    [el("bg-opt1"), el("bg-opt2"), el("bg-opt3")].forEach((b) => b && (b.disabled = true));
+
+    const fb = el("bg-feedback");
+    if (choiceIndex === qObj.correct) {
+      if (fb) fb.textContent = "✅ Correct! +1 point";
+
+      const u = getUser();
+      if (u) {
+        const p = readProfile(u);
+        p.gameProgress.score = (p.gameProgress.score || 0) + 1;
+        p.gameProgress.index = state.idx;
+        writeProfile(u, p);
+        renderScore();
+      }
+    } else {
+      if (fb) fb.textContent = "❌ Incorrect.";
+    }
+
+    const next = el("bg-next");
+    if (next) next.disabled = false;
+  }
+
+  function nextQuestion() {
+    const next = el("bg-next");
+    if (state.idx < QUESTIONS.length - 1) {
+      state.idx += 1;
+
+      const u = getUser();
+      if (u) {
+        const p = readProfile(u);
+        p.gameProgress.index = state.idx;
+        writeProfile(u, p);
+      }
+
+      renderQuestion();
+    } else {
+      // Game complete
+      const qEl = el("bg-question");
+      const fb = el("bg-feedback");
+      const prog = el("bg-progress");
+
+      const u = getUser();
+      const p = u ? readProfile(u) : { gameProgress: { score: 0 } };
+      const score = p.gameProgress.score || 0;
+
+      if (qEl) qEl.textContent = "🎉 Game complete!";
+      if (prog) prog.textContent = `You answered all ${QUESTIONS.length} questions.`;
+      if (fb) fb.textContent = `Final Score: ${score} / ${QUESTIONS.length}`;
+
+      // disable options, change Next to Play Again
+      [el("bg-opt1"), el("bg-opt2"), el("bg-opt3")].forEach((b) => b && (b.disabled = true));
+      if (next) {
+        next.disabled = false;
+        next.textContent = "Play Again";
+        next.onclick = restartGame;
+      }
+    }
+  }
+
+  function restartGame() {
+    const u = getUser();
+    if (u) {
+      const p = readProfile(u);
+      p.gameProgress.index = 0;
+      writeProfile(u, p);
+    }
+    state.idx = 0;
+    state.answered = false;
+
+    const next = el("bg-next");
+    if (next) {
+      next.textContent = "Next";
+      next.onclick = () => window.bookGame_next();
+    }
+    renderQuestion();
+  }
+
+  function resetScore() {
+    const u = getUser();
+    if (!u) {
+      alert("Save your profile name first (Profile ▼).");
+      return;
+    }
+    const p = readProfile(u);
+    p.gameProgress.score = 0;
+    p.gameProgress.index = 0;
+    writeProfile(u, p);
+
+    state.idx = 0;
+    state.answered = false;
+    renderQuestion();
+
+    const fb = el("bg-feedback");
+    if (fb) fb.textContent = "Score reset. Starting over at Question 1.";
+  }
+
+  function init() {
+    if (!el("bg-question")) return; // not on game page
+    // resume where the player left off
+    const u = getUser();
+    if (u) {
+      const p = readProfile(u);
+      const i = Number(p.gameProgress.index || 0);
+      if (!Number.isNaN(i) && i >= 0 && i < QUESTIONS.length) {
+        state.idx = i;
+      }
+    }
+    renderQuestion();
+  }
+
+  // expose minimal API for buttons used in game.html
+  window.bookGame_submitGuess = submitGuess;
+  window.bookGame_next = nextQuestion;
+  window.bookGame_resetScore = resetScore;
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
