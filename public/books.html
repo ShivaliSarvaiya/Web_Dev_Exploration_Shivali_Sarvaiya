@@ -1,56 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Book List</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <title>Book List</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://use.typekit.net/xzh5etg.css" />
 </head>
 
 <body>
+  <header>
+    <!-- SAME dropdown UI as index.html -->
+    <div class="profile-menu">
+      <button id="profileButton" onclick="toggleProfileMenu()">
+        <span id="currentUser">Profile</span> ▼
+      </button>
 
-<header>
-  <div class="logo-wrap">
-    <img src="logo.png" alt="Site logo" class="logo">
-  </div>
+      <div id="profileDropdown" class="profile-dropdown">
+        <input
+          id="usernameInput"
+          placeholder="Enter name"
+          autocomplete="new-password"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          name="profile_name_input_books"
+        />
+        <button onclick="saveUser()">Save Profile</button>
 
-  <h1>Book List</h1>
+        <hr />
+        <p>Theme</p>
+        <button onclick="setTheme('light')">Light</button>
+        <button onclick="setTheme('dark')">Dark</button>
 
-  <nav>
-    <a href="index.html">Intro</a>
-    <a href="authors.html">Best Authors</a>
-    <a href="genres.html">Genres</a>
-    <a href="books.html">Book List</a>
-    <a href="game.html">Guess Game</a>
-    <a href="bookstores.html">Bookstores</a>
-  </nav>
-</header>
+        <hr />
+        <button onclick="logout()">Sign Out</button>
+      </div>
+    </div>
 
-<main>
+    <h1>everything books!</h1>
 
-  <div class="card">
-    <h2>Add a Book</h2>
+    <nav>
+      <a href="index.html">Intro</a>
+      <a href="authors.html">Best Authors</a>
+      <a href="books.html" class="active">Book List</a>
+      <a href="game.html">Guess Game!</a>
+      <a href="bookstores.html">Bookstores</a>
+      <a href="aesthetics_gallery.html">Gallery</a>
+      <a href="playlists.html">Playlist Maker!</a>
+    </nav>
+  </header>
 
-    <input id="titleInput" placeholder="Title">
-    <input id="genreInput" placeholder="Genre">
-    <input id="imageInput" placeholder="Image URL">
+  <main>
+    <div class="card">
+      <h2>Add a Book</h2>
 
-    <select id="listInput">
-      <option value="to-read">To Read</option>
-      <option value="read">Have Read</option>
-      <option value="favorites">Favorites</option>
-    </select>
+      <input id="title" placeholder="Title" />
+      <input id="genre" placeholder="Genre" />
+      <input id="image" placeholder="Image URL" />
 
-    <button onclick="addBook()">Add</button>
-  </div>
+      <select id="list">
+        <option value="to-read">To Read</option>
+        <option value="read">Have Read</option>
+        <option value="favorites">Favorites</option>
+      </select>
 
-  <div id="books"></div>
-  <div id="bookDetail"></div>
+      <button type="button" onclick="addBook()">Add Book</button>
+    </div>
 
-</main>
+    <div id="books"></div>
+  </main>
 
-<footer>Reading Portfolio Final Project</footer>
+  <!-- Shared client logic (profile + theme + books) -->
+  <script src="script.js" defer></script>
 
-<script src="script.js"></script>
-
+  <!-- Page-local helper to render books on load (safe if script.js already does it) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof loadBooks === "function") loadBooks();
+    });
+  </script>
 </body>
 </html>

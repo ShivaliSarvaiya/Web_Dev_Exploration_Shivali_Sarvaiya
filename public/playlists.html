@@ -1,146 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Book-Themed Playlists</title>
-  <style>
-    body {
-      font-family: "Inter", sans-serif;
-      background: linear-gradient(135deg,#f7f9fc,#e6ecf5);
-      margin: 0;
-      padding: 20px;
-    }
-    h1 { text-align:center; color:#1f2a44; }
-    .playlist-form, .playlist { background:white; padding:20px; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.1); margin-bottom:25px; }
-    input, button { padding:10px; border-radius:6px; border:1px solid #ccc; margin-right:5px; }
-    button { background:#2d6cdf; color:white; border:none; cursor:pointer; transition:.25s; }
-    button:hover { background:#1f57b8; transform:scale(1.05); }
-    .song-item { padding:5px 0; }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://use.typekit.net/xzh5etg.css" />
 </head>
+
 <body>
-    <header>
-<h1>Create your own Book-Themed Playlists!</h1>
-<div class="logo-wrap">
-  <img src="logo.png" alt="Site logo" class="logo">
-</div>
-<nav>
-<a href="index.html">Intro</a>
-<a href="authors.html">Best Authors</a>
-<a href="genres.html">Genres</a>
-<a href="books.html">Book List</a>
-<a href="game.html">Guess Game</a>
-<a href="bookstores.html">Bookstores</a>
-<a href="aesthetics_gallery.html">Gallery</a>   
-<a href="playlists.html">Playlist Maker</a>
+  <header>
+    <!-- SAME Profile ▼ dropdown used on other pages -->
+    <div class="profile-menu">
+      <button id="profileButton" onclick="toggleProfileMenu()">
+        <span id="currentUser">Profile</span> ▼
+      </button>
 
-</nav>
-</header>
+      <div id="profileDropdown" class="profile-dropdown">
+        <input
+          id="usernameInput"
+          placeholder="Enter name"
+          autocomplete="new-password"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          name="profile_name_input_playlists"
+        />
+        <button onclick="saveUser()">Save Profile</button>
 
- 
+        <hr />
+        <p>Theme</p>
+        <button onclick="setTheme('light')">Light</button>
+        <button onclick="setTheme('dark')">Dark</button>
 
-  <!-- Form to create a new playlist -->
-  <div class="playlist-form">
-    <input type="text" id="playlist-name" placeholder="Playlist name (book title)">
-    <button id="create-playlist">Create Playlist</button>
-  </div>
+        <hr />
+        <button onclick="logout()">Sign Out</button>
+      </div>
+    </div>
 
-  <!-- Container for all playlists -->
-  <div id="playlists-container"></div>
+    <h1>everything books!</h1>
 
-  <script>
-    const playlistsContainer = document.getElementById('playlists-container');
-    const createBtn = document.getElementById('create-playlist');
+    <nav>
+      <a href="index.html">Intro</a>
+      <a href="authors.html">Best Authors</a>
+      <a href="books.html">Book List</a>
+      <a href="game.html">Guess Game!</a>
+      <a href="bookstores.html">Bookstores</a>
+      <a href="aesthetics_gallery.html">Gallery</a>
+      <a href="playlists.html" class="active">Playlist Maker!</a>
+    </nav>
+  </header>
 
-    let playlists = [];
+  <main>
+    <section class="card playlist-form">
+      <h2>Create a Playlist</h2>
+      <input id="playlist-name" placeholder="Playlist name" />
+      <button id="create-playlist" type="button">Create Playlist</button>
+    </section>
 
-    // Create new playlist
-    createBtn.addEventListener('click', () => {
-      const nameInput = document.getElementById('playlist-name');
-      const name = nameInput.value.trim();
-      if(!name) return alert("Please enter a playlist name.");
-      const newPlaylist = { name, songs: [] };
-      playlists.push(newPlaylist);
-      renderPlaylists();
-      nameInput.value = '';
-    });
+    <!-- script.js will render each playlist here with:
+         - Song name input
+         - "Add Song" button
+         - "❌" buttons per song
+    -->
+    <section id="playlists-container"></section>
+  </main>
 
-    function renderPlaylists() {
-      playlistsContainer.innerHTML = '';
-      playlists.forEach((pl, index) => {
-        const plDiv = document.createElement('div');
-        plDiv.className = 'playlist';
-
-        // Playlist title
-        const title = document.createElement('h2');
-        title.textContent = pl.name;
-        plDiv.appendChild(title);
-
-        // Song input
-        const songInput = document.createElement('input');
-        songInput.type = 'text';
-        songInput.placeholder = 'Song name';
-        plDiv.appendChild(songInput);
-
-        const addSongBtn = document.createElement('button');
-        addSongBtn.textContent = 'Add Song';
-        plDiv.appendChild(addSongBtn);
-
-        // Song list
-        const songList = document.createElement('div');
-        plDiv.appendChild(songList);
-
-        // Add song event
-        addSongBtn.addEventListener('click', () => {
-          const songName = songInput.value.trim();
-          if(!songName) return;
-          pl.songs.push(songName);
-          songInput.value = '';
-          updateSongList();
-        });
-
-        function updateSongList() {
-          songList.innerHTML = '';
-          pl.songs.forEach((song, i) => {
-            const songDiv = document.createElement('div');
-            songDiv.className = 'song-item';
-            songDiv.textContent = `${i+1}. ${song}`;
-            songList.appendChild(songDiv);
-          });
-        }
-
-        playlistsContainer.appendChild(plDiv);
-      });
-    }
-  </script>
-  <h1>Need Inspiration? Check out these!</h1>
-  <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M" 
-        width="300" 
-        height="380" 
-        frameborder="0" 
-        allowtransparency="true" 
-        allow="encrypted-media">
-</iframe>
-<iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M" 
-        width="300" 
-        height="380" 
-        frameborder="0" 
-        allowtransparency="true" 
-        allow="encrypted-media">
-</iframe>
-<iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M" 
-        width="300" 
-        height="380" 
-        frameborder="0" 
-        allowtransparency="true" 
-        allow="encrypted-media">
-</iframe>
-<iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M" 
-        width="300" 
-        height="380" 
-        frameborder="0" 
-        allowtransparency="true" 
-        allow="encrypted-media">
-</iframe>
+  <!-- IMPORTANT: Only include the shared script. No inline JS here. -->
+  <script src="script.js" defer></script>
 </body>
 </html>
+``

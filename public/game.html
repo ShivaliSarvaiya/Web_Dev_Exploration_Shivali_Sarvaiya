@@ -1,41 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Guess the Plot</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <title>Guess the Plot</title>
+  <!-- Load your shared CSS + font -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://use.typekit.net/xzh5etg.css" />
 </head>
 
 <body>
+  <header>
+    <!-- SAME Profile ▼ dropdown as other pages -->
+    <div class="profile-menu">
+      <button id="profileButton" onclick="toggleProfileMenu()">
+        <span id="currentUser">Profile</span> ▼
+      </button>
 
-<header>
-<h1>Guess the Plot</h1>
-<div class="logo-wrap">
-  <img src="logo.png" alt="Site logo" class="logo">
-</div>
-<nav>
-<a href="index.html">Intro</a>
-<a href="authors.html">Best Authors</a>
-<a href="genres.html">Genres</a>
-<a href="books.html">Book List</a>
-<a href="game.html">Guess Game</a>
-</nav>
-</header>
+      <div id="profileDropdown" class="profile-dropdown">
+        <input
+          id="usernameInput"
+          placeholder="Enter name"
+          autocomplete="new-password"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          name="profile_name_input_game"
+        />
+        <button onclick="saveUser()">Save Profile</button>
 
-<main>
+        <hr />
+        <p>Theme</p>
+        <button onclick="setTheme('light')">Light</button>
+        <button onclick="setTheme('dark')">Dark</button>
 
-<div class="card">
-<h2 id="question">Loading...</h2>
-<button onclick="guess('Harry Potter')">Harry Potter</button>
-<button onclick="guess('Percy Jackson')">Percy Jackson</button>
-<button onclick="guess('The Hunger Games')">Hunger Games</button>
-<p id="score"></p>
-</div>
+        <hr />
+        <button onclick="logout()">Sign Out</button>
+      </div>
+    </div>
 
-</main>
+    <h1>everything books!</h1>
 
-<script src="script.js"></script>
-<footer>Reading Portfolio Final Project</footer>
+    <nav>
+      <a href="index.html">Intro</a>
+      <a href="authors.html">Best Authors</a>
+      <a href="books.html">Book List</a>
+      <a href="game.html" class="active">Guess Game!</a>
+      <a href="bookstores.html">Bookstores</a>
+      <a href="aesthetics_gallery.html">Gallery</a>
+      <a href="playlists.html">Playlist Maker!</a>
+    </nav>
+  </header>
 
+  <main>
+    <section class="card">
+      <h2 id="game-question">[ Your plot prompt goes here ]</h2>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin:12px 0;">
+        <button id="opt1" type="button" onclick="submitGuess(0)">Option 1</button>
+        <button id="opt2" type="button" onclick="submitGuess(1)">Option 2</button>
+        <button id="opt3" type="button" onclick="submitGuess(2)">Option 3</button>
+      </div>
+
+      <p id="game-feedback" style="min-height:1.4em;"></p>
+
+      <div style="display:flex; gap:14px; align-items:center; margin-top:10px;">
+        <button type="button" onclick="resetGameScore()">Reset Score</button>
+        <strong id="game-score">Score: 0</strong>
+      </div>
+
+      <hr style="margin:18px 0; opacity:.4;" />
+
+      <!-- You can edit these fields on the page to set up your question/options quickly -->
+      <details>
+        <summary>Quick Editor (for you)</summary>
+        <div style="margin-top:10px; display:grid; gap:8px;">
+          <label>Question/Plot
+            <input id="edit-question" placeholder="Type your question/plot…" />
+          </label>
+          <label>Option 1
+            <input id="edit-opt1" placeholder="First option" />
+          </label>
+          <label>Option 2
+            <input id="edit-opt2" placeholder="Second option" />
+          </label>
+          <label>Option 3
+            <input id="edit-opt3" placeholder="Third option" />
+          </label>
+
+          <label>Correct Option:
+            <select id="edit-correct">
+              <option value="0">Option 1</option>
+              <option value="1">Option 2</option>
+              <option value="2">Option 3</option>
+            </select>
+          </label>
+
+          <div>
+            <button type="button" onclick="applyGameEditor()">Apply Above to Game</button>
+          </div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <!-- Shared logic (profile + theme + playlists + books + game) -->
+  <script src="script.js"></script>
+
+  <footer>Reading Portfolio Final Project</footer>
 </body>
 </html>

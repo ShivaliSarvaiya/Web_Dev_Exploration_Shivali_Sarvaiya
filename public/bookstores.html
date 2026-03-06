@@ -6,28 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://use.typekit.net/xzh5etg.css">
 
   <style>
     /* Make sure map has height */
     #map {
       height: 700px;
-      width: 100%;
+      width: 95%;
+      margin: 20px auto;
+      
+      
     }
   </style>
   <header>
-  <div class="logo-wrap">
-    <img src="logo.png" alt="Site logo" class="logo">
-  </div>
-
-  <h1>Book List</h1>
+<h1>everything books!</h1>
 
   <nav>
-    <a href="index.html">Intro</a>
+<a href="index.html">Intro</a>
     <a href="authors.html">Best Authors</a>
-    <a href="genres.html">Genres</a>
     <a href="books.html">Book List</a>
-    <a href="game.html">Guess Game</a>
+    <a href="game.html">Guess Game!</a>
     <a href="bookstores.html">Bookstores</a>
+    <a href="aesthetics_gallery.html">Gallery</a>
+    <a href="playlists.html">Playlist Maker!</a>
   </nav>
 </header>
 </head>
@@ -67,6 +68,6 @@
         .bindPopup("<b>" + bookstores[i][0] + "</b>");
     }
   </script>
-
+<script src="script.js"></script>
 </body>
 </html>
